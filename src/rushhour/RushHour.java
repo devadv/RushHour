@@ -5,22 +5,21 @@ public class RushHour
 	public static final int numRows = 6;
 	public static final int numCols = 6;
 	
-	Veld[][] bord = new Veld[numRows][numCols];
+	private Veld[][] bord;
 	
-	
+
 	public RushHour()
 	{
-		for (Veld[] row : bord)
+		bord = new Veld[numRows][numCols];
+		
+		for (int i = 0; i < numRows; i++)
 		{
-			for(Veld veld : row)
+			for (int j = 0; j < numCols; j++)
 			{
-				veld = new Veld();
-				veld.unBlock();
+				bord[i][j] = new Veld();
+				bord[i][j].unBlock();
 			}
 		}
-		
-		
-		
 		
 	}
 	
@@ -62,23 +61,158 @@ public class RushHour
 		
 		
 		
+		boolean blocked = false;
+		boolean outSideBoard = false;
 		
+		if (car.getOrientation() == Car.HORIZONTAL)
+		{
+
+			for (int i = column; i < column + car.getSize(); i++)
+			{
+				if (i >= numCols)
+				{
+					outSideBoard = true;
+					break;
+				}
+				
+				if (bord[row][i].isBlocked())
+				{
+					blocked = true;
+					break;
+				}
+			}
+			
+		}
+		else if (car.getOrientation() == Car.VERTICAL)
+		{
+			for (int i = row; i < row + car.getSize(); i++)
+			{
+				if (i >= numRows)
+				{
+					outSideBoard = true;
+					break;
+				}
+
+				
+				
+				if (bord[i][column].isBlocked())
+				{
+					
+					blocked = true;
+					break;
+				}
+			}
+		}
+
 		
-		car.setYPos(row);
-		car.setXPos(column);
+		if (outSideBoard || blocked)
+		{
+			if (outSideBoard)
+				System.out.println("Trying to place car outside board");
+			else
+				System.out.println("Blocked, can not place car");
+		
+			
+			if (car.isOnBoard())
+			{
+				// restore original position
+				placeCar(car, car.getYPos(), car.getXPos());
+			}
+		}
+		
+		else
+		{
+			if (car.getOrientation() == Car.HORIZONTAL)
+			{
+				for (int i = column; i < column + car.getSize(); i++)
+				{
+					bord[row][i].block();
+				}
+				
+			}
+			else if (car.getOrientation() == Car.VERTICAL)
+			{
+				for (int i = row; i < row + car.getSize(); i++)
+				{
+					bord[i][column].block();
+				}
+			}
+
+		
+			car.setYPos(row);
+			car.setXPos(column);
+			car.setOnBoard(true);
+			
+		}
+		
 	}
 	
+	
+	
+	
+		
+		
+	public void printBoard()
+	{
+		System.out.println("Print bord");
+		if (bord == null)
+		{
+			System.out.println("Error, bord null");
+		}
+		else
+		{
+			System.out.println("bord rows: "+ bord.length);
+			System.out.println("bord columns: "+ bord[0].length);
+			
+		}
+		
+		
+		for (Veld[] row : bord)
+		{
+			for(Veld veld : row)
+			{
+				if (veld == null)
+				{
+					System.out.println("veld null");
+				}
+				else
+				{
+					if (veld.isBlocked() )
+					{
+						System.out.print("X");
+					}
+					else
+					{
+						System.out.print("O");
+					}
+					
+
+					
+				}
+				
+			}
+			System.out.println();
+		}
+
+	}
+		
+
 	
 	
 	public static void main(String[] args)
 	{
 		System.out.println("Test rushhour");
-		new RushHour();
+		RushHour rh = new RushHour();
 		
-		Car car1 = new Car(2, Car.HORIZONTAL);
+		Car car1 = new Car(2, Car.VERTICAL);
 		
+		rh.placeCar(car1,2, 1);
 		
+		rh.placeCar(car1,4, 1);
 		
+		rh.printBoard();
+		
+	
 		
 	}
 			
