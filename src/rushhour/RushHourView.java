@@ -20,7 +20,6 @@ public class RushHourView extends JPanel
 	}
 	
 	
-	
 	@Override
 	protected void paintComponent(Graphics g)
 	{
@@ -34,16 +33,17 @@ public class RushHourView extends JPanel
 		int boardStartXPos = 30;
 		int boardStartYPos = 30;
 		
-		int boardSizeX = RushHour.numCols * (squareSize + 2 * squareMarge) + squareMarge;
-		int boardSizeY = RushHour.numRows * (squareSize + 2 * squareMarge) + squareMarge;
-		
+		int boardSizeX = RushHour.numCols * (squareSize + 2 * squareMarge);
+		int boardSizeY = RushHour.numRows * (squareSize + 2 * squareMarge);
 		
 		System.out.println("Boardsize " + boardSizeX + " x " + boardSizeY );
 		
+		// draw border of board
 		g2.setStroke(new BasicStroke(2));
-		
 		g2.drawRect(boardStartXPos, boardStartYPos, boardSizeX, boardSizeY);
+
 		
+		// draw squares in board
 		g2.setStroke(defaultStroke);
 		
 		g2.setColor(Color.GRAY);
@@ -57,9 +57,6 @@ public class RushHourView extends JPanel
 						      squareSize, squareSize, false);
 			}
 		}
-		
-		
-		
 		
 	}
 	
