@@ -7,9 +7,16 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.Stroke;
-
+/**
+ * Utility methods for informational output related to the Graphics system.  
+ * @author david
+ */
 public class Utilities
 {
+	/**
+	 * Prints properties of the given awt.Graphics object 
+	 * @param g Graphics(2D) object
+	 */
 	public static void printGraphicProperties(Graphics g)
 	{
 		System.out.println("Graphics properties " + g.getClass().getName());
@@ -35,12 +42,18 @@ public class Utilities
 		}
 	}
 	
+	/**
+	 * Gives a String representation of a color
+	 * @param color a Color
+	 * @return String with format RGB: { redvalue, greenvalue, bluevalue } Alpha: alphavalue
+	 * alpha only if alpha != 255 
+	 */
 	public static String colorStr(Color color)
 	{
 		String colorStr = color.getRed() + ", " +
 				color.getGreen() +", " + color.getBlue();
 		
-		String alpha = (color.getAlpha() != 25) ? " Alpha: " + color.getAlpha() : "";
+		String alpha = (color.getAlpha() != 255) ? " Alpha: " + color.getAlpha() : "";
 	                      
 		return ("RGB: {" + colorStr + "}" + alpha);
 		
@@ -49,6 +62,11 @@ public class Utilities
 	
 
 
+	/**
+	 * Gives information about a Font 
+	 * @param font a java.awt.Font
+	 * @return String with properties:  Family=  Name= etc
+	 */
 	public static String fontStr(Font font)
 	{
 		StringBuilder styleSb = new StringBuilder(" Style=");
@@ -59,8 +77,6 @@ public class Utilities
 		if (font.isPlain())
 			styleSb.append("plain");
 		
-		
-		
 		return " Family="+ font.getFamily() + " Name=" + font.getName() +
 				" FontName=" + font.getFontName() + styleSb;
 				
@@ -68,7 +84,7 @@ public class Utilities
 	
 	
 	/**
-	 * Returns a string with the properties of the BasicStroke
+	 * Returns a String with the properties of the BasicStroke
 	 */
 	public static String basicStrokeStr(BasicStroke bs)
 	{

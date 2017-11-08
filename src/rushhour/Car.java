@@ -2,7 +2,12 @@ package rushhour;
 
 import java.awt.Color;
 
-
+/**
+ * All vehicles are a Car object. The size of the car is 2 (two blocklengths on the board) for a
+ * normal car and 3 for a truck.  The orientation can be horizontal or vertical. The position is
+ * stored and whether or not the car is placed on the board.
+ * @author david
+ */
 public class Car
 {
 	public static final int HORIZONTAL = 0;
@@ -82,7 +87,6 @@ public class Car
 	
 	public void setOnBoard(boolean onBoard)
 	{
-		
 		this.onBoard = onBoard;
 	}
 	

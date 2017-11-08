@@ -1,6 +1,6 @@
 package rushhour;
 
-public class Veld
+public class Field
 {
 	private boolean blocked = false;
 	

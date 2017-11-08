@@ -11,7 +11,7 @@ public class RushHourApplication extends JFrame
 	public RushHourApplication()
 	{
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		//this.setSize(400, 300);
+		this.setTitle("RushHour");
 		
 		mainView = new RushHourView();
 		this.add(mainView);

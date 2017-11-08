@@ -1,29 +1,48 @@
 package rushhour;
 
+/**
+ * Model / logic for the RushHour game. Contains a 6x6 board of fields. 
+ * @author david
+ */
 public class RushHour
 {
 	public static final int numRows = 6;
 	public static final int numCols = 6;
 	
-	private Veld[][] bord;
+	private Field[][] board;
 	
 
 	public RushHour()
 	{
-		bord = new Veld[numRows][numCols];
+		board = new Field[numRows][numCols];
 		
 		for (int i = 0; i < numRows; i++)
 		{
 			for (int j = 0; j < numCols; j++)
 			{
-				bord[i][j] = new Veld();
-				bord[i][j].unBlock();
+				board[i][j] = new Field();
+				board[i][j].unBlock();
 			}
 		}
 		
 	}
 	
-	
+	/**
+	 * Places a car on the board. If the car is already on the board, the car is replaced.
+	 * If the car can be placed or replaced, the free/unfree marks on the board
+	 * are adjusted and the car's coordinates are set.
+	 * Exceptions thrown:
+	 * IllegalArgument exception when the row/column argument is out of range.
+	 * 
+	 * 
+	 *  <p>
+	 *  The given coordinates are for the top-left position of the car.
+	 *  Rows and columns start with 0. Range is 0-5.
+	 *  
+	 * @param car The car object to place or replace
+	 * @param row The row (vertical coordinate) to place the top-left position of the car
+	 * @param column The column (horizontal coordinate) to place the top-left position of the car
+	 */
 	public void placeCar(Car car, int row, int column)
 	{
 		if (row < 0 || row >= numRows || column < 0 || column >= numCols)
@@ -44,7 +63,7 @@ public class RushHour
 			{
 				for (int i = startX; i < startX + carSize; i++)
 				{
-					bord[startY][i].unBlock();
+					board[startY][i].unBlock();
 				}
 				
 			}
@@ -52,7 +71,7 @@ public class RushHour
 			{
 				for (int i = startY; i < startY + carSize; i++)
 				{
-					bord[i][startX].unBlock();
+					board[i][startX].unBlock();
 				}
 			}
 		}
@@ -75,7 +94,7 @@ public class RushHour
 					break;
 				}
 				
-				if (bord[row][i].isBlocked())
+				if (board[row][i].isBlocked())
 				{
 					blocked = true;
 					break;
@@ -95,7 +114,7 @@ public class RushHour
 
 				
 				
-				if (bord[i][column].isBlocked())
+				if (board[i][column].isBlocked())
 				{
 					
 					blocked = true;
@@ -126,7 +145,7 @@ public class RushHour
 			{
 				for (int i = column; i < column + car.getSize(); i++)
 				{
-					bord[row][i].block();
+					board[row][i].block();
 				}
 				
 			}
@@ -134,7 +153,7 @@ public class RushHour
 			{
 				for (int i = row; i < row + car.getSize(); i++)
 				{
-					bord[i][column].block();
+					board[i][column].block();
 				}
 			}
 
@@ -151,25 +170,27 @@ public class RushHour
 	
 	
 		
-		
+	/**
+	 * Simple text output of the board's blocked positions.
+	 */
 	public void printBoard()
 	{
 		System.out.println("Print bord");
-		if (bord == null)
+		if (board == null)
 		{
 			System.out.println("Error, bord null");
 		}
 		else
 		{
-			System.out.println("bord rows: "+ bord.length);
-			System.out.println("bord columns: "+ bord[0].length);
+			System.out.println("bord rows: "+ board.length);
+			System.out.println("bord columns: "+ board[0].length);
 			
 		}
 		
 		
-		for (Veld[] row : bord)
+		for (Field[] row : board)
 		{
-			for(Veld veld : row)
+			for(Field veld : row)
 			{
 				if (veld == null)
 				{
@@ -206,9 +227,9 @@ public class RushHour
 		
 		Car car1 = new Car(2, Car.VERTICAL);
 		
-		rh.placeCar(car1,2, 1);
+		rh.placeCar(car1, 2, 1);
 		
-		rh.placeCar(car1,4, 1);
+		rh.placeCar(car1, 4, 1);
 		
 		rh.printBoard();
 		
