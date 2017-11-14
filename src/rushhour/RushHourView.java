@@ -19,8 +19,8 @@ import javax.swing.JPanel;
 @SuppressWarnings("serial")
 public class RushHourView extends JPanel
 {
-	private Image carImg = null;
-	private Image truckImg = null;
+	private BufferedImage carImg = null;
+	private BufferedImage truckImg = null;
 	
 	private int boardStartXPos = 30;
 	private int boardStartYPos = 30;
@@ -35,15 +35,12 @@ public class RushHourView extends JPanel
 		this.setPreferredSize(new Dimension(600, 700));
 		
 		try
-		{
+		{	
 			
+			carImg = ImageIO.read(new File("images/auto2.png"));
 			
-			URL auto2URL = getResource("/images/auto2.png");
+			truckImg = ImageIO.read(new File("images/truck5.png"));
 			
-			carImg = ImageIO.read(auto2URL);
-			
-			URL truck5URL = getResource("/images/truck5.png");
-			truckImg = ImageIO.read(truck5URL);
 		} catch (IOException e)
 		{
 			System.out.println("Cannot load image");
