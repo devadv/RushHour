@@ -11,6 +11,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -35,13 +36,38 @@ public class RushHourView extends JPanel
 		
 		try
 		{
-			carImg = ImageIO.read(new File("/home/david/Documents/auto2.png"));
-			truckImg = ImageIO.read(new File("/home/david/Documents/truck5.png"));
+			
+			
+			URL auto2URL = getResource("/images/auto2.png");
+			
+			carImg = ImageIO.read(auto2URL);
+			
+			URL truck5URL = getResource("/images/truck5.png");
+			truckImg = ImageIO.read(truck5URL);
 		} catch (IOException e)
 		{
 			System.out.println("Cannot load image");
 			System.out.println(e.getMessage());
 		}
+		
+		
+		
+	}
+	
+	
+	private URL getResource(String name)
+	{
+		
+		Class c = getClass();
+		URL resource = c.getResource(name);
+		
+		if (resource == null)
+		{
+			System.out.println("Cannot find resource " + name + ", exiting");
+			System.exit(1);
+		}
+
+		return resource;
 		
 	}
 	

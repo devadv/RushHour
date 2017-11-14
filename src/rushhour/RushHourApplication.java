@@ -23,7 +23,6 @@ public class RushHourApplication extends JFrame
 	public static void main(String[] args)
 	{
 
-		
 		System.out.println("Starting RushHourApplication");
 		RushHourApplication rh = new RushHourApplication();
 		rh.setVisible(true);
