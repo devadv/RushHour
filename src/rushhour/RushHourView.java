@@ -12,6 +12,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -19,38 +20,46 @@ import javax.swing.JPanel;
 @SuppressWarnings("serial")
 public class RushHourView extends JPanel
 {
-	private Image carImg = null;
-	private Image truckImg = null;
-	
 	private int boardStartXPos = 30;
 	private int boardStartYPos = 30;
 	
 	private int squareSize = 50;
 	private int squareMarge = 5;
-
-
+	
+	private HashMap<String, Image> vehicleImage;
 
 	public RushHourView()
 	{
+		System.out.println("Starting view");
 		this.setPreferredSize(new Dimension(600, 700));
+		vehicleImage = new HashMap<>();
 		
 		try
 		{
+			// load all images in the vehicleImage hashmap
+			vehicleImage.put("X",  ImageIO.read( getResource("/auto_x_rood.png") ) );
+			vehicleImage.put("A",  ImageIO.read( getResource("/auto_a_groenblauw.png") ) );
+			vehicleImage.put("B",  ImageIO.read( getResource("/auto_b_geel.png") ) );
+			vehicleImage.put("C",  ImageIO.read( getResource("/auto_c_lichtblauw.png") ) );
+			vehicleImage.put("D",  ImageIO.read( getResource("/auto_d_roze.png") ) );
+			vehicleImage.put("E",  ImageIO.read( getResource("/auto_e_blauw.png") ) );
+			vehicleImage.put("F",  ImageIO.read( getResource("/auto_f_groen.png") ) );
+			vehicleImage.put("G",  ImageIO.read( getResource("/auto_g_donkergroen.png") ) );
+			vehicleImage.put("H",  ImageIO.read( getResource("/auto_h_grijs.png") ) );
+			vehicleImage.put("I",  ImageIO.read( getResource("/auto_i_wit.png") ) );
+			vehicleImage.put("J",  ImageIO.read( getResource("/auto_j_bruin.png") ) );
+			vehicleImage.put("O",  ImageIO.read( getResource("/truck_o_geel.png") ) );
+			vehicleImage.put("P",  ImageIO.read( getResource("/truck_p_paars.png") ) );
+			vehicleImage.put("Q",  ImageIO.read( getResource("/truck_q_blauw.png") ) );
+			vehicleImage.put("R",  ImageIO.read( getResource("/truck_r_groen.png") ) );
+			vehicleImage.put("stdcar",  ImageIO.read( getResource("/auto2.png") ) );
+			vehicleImage.put("stdtruck",  ImageIO.read( getResource("/truck5.png") ) );
 			
-			
-			URL auto2URL = getResource("/images/auto2.png");
-			
-			carImg = ImageIO.read(auto2URL);
-			
-			URL truck5URL = getResource("/images/truck5.png");
-			truckImg = ImageIO.read(truck5URL);
 		} catch (IOException e)
 		{
 			System.out.println("Cannot load image");
 			System.out.println(e.getMessage());
 		}
-		
-		
 		
 	}
 	
@@ -58,7 +67,7 @@ public class RushHourView extends JPanel
 	private URL getResource(String name)
 	{
 		
-		Class c = getClass();
+		Class<? extends RushHourView> c = getClass();
 		URL resource = c.getResource(name);
 		
 		if (resource == null)
@@ -67,6 +76,7 @@ public class RushHourView extends JPanel
 			System.exit(1);
 		}
 
+		System.out.println("URL="+resource);
 		return resource;
 		
 	}
@@ -96,15 +106,15 @@ public class RushHourView extends JPanel
 		// draw squares in board
 		g2.setStroke(defaultStroke);
 		
-		g2.setColor(Color.GRAY);
+		g2.setColor(Color.LIGHT_GRAY);
 		
 		for (int i = 0; i < RushHour.numRows; i++)
 		{
 			for (int j = 0; j < RushHour.numCols; j++)
 			{
-				g2.draw3DRect(boardStartXPos + squareMarge + j * (squareSize + 2 * squareMarge),
+				g2.drawRect(boardStartXPos + squareMarge + j * (squareSize + 2 * squareMarge),
 						      boardStartYPos+ squareMarge + i * (squareSize + 2 * squareMarge),
-						      squareSize - 1, squareSize - 1, false);
+						      squareSize - 1, squareSize - 1);
 			}
 		}
 		
@@ -113,12 +123,13 @@ public class RushHourView extends JPanel
 		
 		Car drawTestTruck = new Car(3, Car.HORIZONTAL);
 		
-		drawTestTruck.setXPos(0);
+		drawTestTruck.setXPos(3);
 		drawTestTruck.setYPos(1);
 		
 		drawCar(g2, drawTestTruck);
 		
-		drawTestTruck.setXPos(3);
+		drawTestTruck.setXPos(0);
+		drawTestTruck.setYPos(5);
 		drawCar(g2, drawTestTruck);
 		
 		Car drawTestCar = new Car(2, Car.HORIZONTAL);
@@ -157,16 +168,16 @@ public class RushHourView extends JPanel
 	 */
 	private void drawCar(Graphics2D g, Car car)
 	{
-		Image vehicleImage = null;
+		Image vehicleImg = null;
 				
 		// determine which image to use
 		if (car.getSize() == 2)
 		{
-			vehicleImage = carImg;
+			vehicleImg = vehicleImage.get("A");
 		}
 		else if (car.getSize() >= 3)
 		{
-			vehicleImage = truckImg;
+			vehicleImg = vehicleImage.get("Q");
 		}
 		
 		// total square size for car position
@@ -181,7 +192,7 @@ public class RushHourView extends JPanel
 		if (car.getOrientation() == Car.HORIZONTAL)
 		{
 			// horizontal car: positioning and resing in one method 
-			g.drawImage(vehicleImage,
+			g.drawImage(vehicleImg,
 					boardStartXPos + squareSizeIncl * car.getXPos() + lengthPlaceMarge / 2, 
 					boardStartYPos + squareSizeIncl * car.getYPos() + widthPlaceMarge / 2,
 					carDrawLength,
@@ -192,8 +203,8 @@ public class RushHourView extends JPanel
 			// uses transform operation to draw the car 90 degree clockwise rotated
 			
 			// resize factor to fit image in block length
-			double lengthScale = (double) carDrawLength / vehicleImage.getWidth(null);
-			double widthScale = (double) carDrawWidth / vehicleImage.getHeight(null);
+			double lengthScale = (double) carDrawLength / vehicleImg.getWidth(null);
+			double widthScale = (double) carDrawWidth / vehicleImg.getHeight(null);
 			
 			AffineTransform rotXForm = AffineTransform.getQuadrantRotateInstance(1);
 	
@@ -209,7 +220,7 @@ public class RushHourView extends JPanel
 			//scaling
 			rotXForm.scale(lengthScale, widthScale);
 			
-			g.drawImage(vehicleImage, rotXForm, null);
+			g.drawImage(vehicleImg, rotXForm, null);
 		}
 
 						
