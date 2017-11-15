@@ -12,13 +12,16 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
-public class RushHourView extends JPanel
+public class RushHourView extends JPanel implements Observer
 {
 	private int boardStartXPos = 30;
 	private int boardStartYPos = 30;
@@ -26,6 +29,11 @@ public class RushHourView extends JPanel
 	private int squareSize = 50;
 	private int squareMarge = 5;
 	
+	private RushHour model;
+	
+	/**
+	 * Map for preloaded images. Key is the letter code of the image.
+	 */
 	private HashMap<String, Image> vehicleImage;
 
 	public RushHourView()
@@ -67,8 +75,7 @@ public class RushHourView extends JPanel
 	private URL getResource(String name)
 	{
 		
-		Class<? extends RushHourView> c = getClass();
-		URL resource = c.getResource(name);
+		URL resource = getClass().getResource(name);
 		
 		if (resource == null)
 		{
@@ -76,12 +83,9 @@ public class RushHourView extends JPanel
 			System.exit(1);
 		}
 
-		System.out.println("URL="+resource);
+		// System.out.println("URL="+resource);
 		return resource;
-		
 	}
-	
-
 	
 	@Override
 	protected void paintComponent(Graphics g)
@@ -120,43 +124,32 @@ public class RushHourView extends JPanel
 		
 		
 		// Draw cars
-		
-		Car drawTestTruck = new Car(3, Car.HORIZONTAL);
-		
-		drawTestTruck.setXPos(3);
-		drawTestTruck.setYPos(1);
-		
-		drawCar(g2, drawTestTruck);
-		
-		drawTestTruck.setXPos(0);
-		drawTestTruck.setYPos(5);
-		drawCar(g2, drawTestTruck);
-		
-		Car drawTestCar = new Car(2, Car.HORIZONTAL);
-		drawTestCar.setYPos(2);
-		drawCar(g2, drawTestCar);
-		
-		drawTestCar.setXPos(2);
-		drawCar(g2, drawTestCar);
-		drawTestCar.setXPos(4);
-		drawCar(g2, drawTestCar);
-		
-		Car drawTestCarVert = new Car(2, Car.VERTICAL);
-
-		drawCar(g2, drawTestCarVert);
-		
-		drawTestCarVert.setYPos(3);
-		drawCar(g2, drawTestCarVert);
-		
-		drawTestCarVert.setXPos(1);
-		drawCar(g2, drawTestCarVert);
-		
-		
-		
-
-		
+		//testDrawCar(g2);
+		drawCarList(g2);
 
 	}
+	
+	
+	
+	
+	private void drawCarList(Graphics2D g2)
+	{
+		if (model == null)
+		{
+			System.out.println("drawCarList: model is null");
+			return;
+		}
+		
+		ArrayList<Car> carList = model.getCarList();
+		
+		for (Car car : carList)
+		{
+			drawCar(g2, car);
+			
+		}
+	}
+	
+	
 	
 	
 	/**
@@ -222,9 +215,60 @@ public class RushHourView extends JPanel
 			
 			g.drawImage(vehicleImg, rotXForm, null);
 		}
+		
+		
+		
 
 						
 	}
+	
+	
+	/**
+	 * For testing draw operations
+	 * @param g2
+	 */
+	private void testDrawCar(Graphics2D g2)
+	{
+		Car drawTestTruck = new Car(3, Car.HORIZONTAL);
+		
+		drawTestTruck.setXPos(3);
+		drawTestTruck.setYPos(1);
+		
+		drawCar(g2, drawTestTruck);
+		
+		drawTestTruck.setXPos(0);
+		drawTestTruck.setYPos(5);
+		drawCar(g2, drawTestTruck);
+		
+		Car drawTestCar = new Car(2, Car.HORIZONTAL);
+		drawTestCar.setYPos(2);
+		drawCar(g2, drawTestCar);
+		
+		drawTestCar.setXPos(2);
+		drawCar(g2, drawTestCar);
+		drawTestCar.setXPos(4);
+		drawCar(g2, drawTestCar);
+		
+		Car drawTestCarVert = new Car(2, Car.VERTICAL);
+
+		drawCar(g2, drawTestCarVert);
+		
+		drawTestCarVert.setYPos(3);
+		drawCar(g2, drawTestCarVert);
+		
+		drawTestCarVert.setXPos(1);
+		drawCar(g2, drawTestCarVert);
+	}
+
+
+	@Override
+	public void update(Observable o, Object arg)
+	{
+		model = (RushHour) o;
+		repaint();
+		
+	}
+
 		
 	
 

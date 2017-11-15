@@ -1,15 +1,23 @@
 package rushhour;
 
+import java.util.ArrayList;
+import java.util.Observable;
+
 /**
  * Model / logic for the RushHour game. Contains a 6x6 board of fields. 
  * @author david
  */
-public class RushHour
+public class RushHour extends Observable
 {
 	public static final int numRows = 6;
 	public static final int numCols = 6;
 	
 	private Field[][] board;
+	
+	/**
+	 * List of all cars on the board.
+	 */
+	private ArrayList<Car> carList = new ArrayList<>();
 	
 
 	public RushHour()
@@ -58,6 +66,9 @@ public class RushHour
 			int startX = car.getXPos();
 			int startY = car.getYPos();
 			int carSize = car.getSize();
+			
+			
+			carList.remove(car);
 			
 			if (car.getOrientation() == Car.HORIZONTAL)
 			{
@@ -161,6 +172,10 @@ public class RushHour
 			car.setYPos(row);
 			car.setXPos(column);
 			car.setOnBoard(true);
+			carList.add(car);
+			
+			setChanged();
+			notifyObservers();
 			
 		}
 		
@@ -168,7 +183,10 @@ public class RushHour
 	
 	
 	
-	
+	public ArrayList<Car> getCarList()
+	{
+		return carList;
+	}
 		
 	/**
 	 * Simple text output of the board's blocked positions.
@@ -220,6 +238,8 @@ public class RushHour
 
 	
 	
+	
+	
 	public static void main(String[] args)
 	{
 		System.out.println("Test rushhour");
@@ -232,6 +252,8 @@ public class RushHour
 		rh.placeCar(car1, 4, 1);
 		
 		rh.printBoard();
+		
+		
 		
 	
 		
