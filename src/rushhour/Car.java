@@ -16,14 +16,20 @@ public class Car
 	private int size;
 	private int orientation;
 	
-	private int xPos = 0;
-	private int yPos = 0;
+	private int column = 0; // xPosition, horizontal
+	private int row = 0; // yPosition, vertical
 	
 	private boolean onBoard = false;
 	
 	private Color color = Color.BLUE;
 	
 	Car(int size, int orientation)
+	{
+		this(size, orientation, Color.BLUE);
+	}
+	
+	
+	Car(int size, int orientation, Color color)
 	{
 		if ( size < 2 || size > 3)
 		{
@@ -37,9 +43,17 @@ public class Car
 		
 		this.size = size;
 		this.orientation = orientation;
-		
+		this.color = color;
+				
 	}
+
 	
+	
+	
+	/**
+	 * Returns the length of the car. That is the number of blocks the car spans. 2 for normal cars 3 for trucks.
+	 * @return Size, number of blocks that the car spans. 
+	 */
 	public int getSize()
 	{
 		return size;
@@ -60,24 +74,40 @@ public class Car
 		this.color = color;
 	}
 	
-	public void setXPos(int xPos)
+	/**
+	 * Sets the horizontal position (column) of the car.
+	 * @param xPos
+	 */
+	public void setColumn(int column)
 	{
-		this.xPos = xPos;
+		this.column = column;
 	}
 	
-	public void setYPos(int yPos)
+	/**
+	 * Sets the vertical position (row) of the car.
+	 * @param yPos
+	 */
+	public void setRow(int row)
 	{
-		this.yPos = yPos;
+		this.row = row;
 	}
 	
-	public int getXPos()
+	/**
+	 * Gets the horizontal position (column) of the car.
+	 * @return Horizontal / column / X position
+	 */
+	public int getColumn()
 	{
-		return xPos;
+		return column;
 	}
 	
-	public int getYPos()
+	/**
+	 * Gets the vertical position (row) of the car.
+	 * @return Vertical / row / Y Position
+	 */
+	public int getRow()
 	{
-		return yPos;
+		return row;
 	}
 	
 	public boolean isOnBoard()

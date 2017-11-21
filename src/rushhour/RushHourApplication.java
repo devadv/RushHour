@@ -16,10 +16,10 @@ public class RushHourApplication extends JFrame
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setTitle("RushHour");
 		
-		mainView = new RushHourView();
 		
 		model = new RushHour();
 		
+		mainView = new RushHourView(model);
 		
 		model.addObserver((Observer) mainView);
 		

@@ -38,9 +38,12 @@ public class RushHourView extends JPanel implements Observer
 	 * Map for preloaded images. Key is the letter code of the image.
 	 */
 	private HashMap<String, Image> vehicleImage;
-
-	public RushHourView()
+	
+	
+	public RushHourView(RushHour model)
 	{
+		this.model = model;
+				
 		System.out.println("Starting view");
 		this.setPreferredSize(new Dimension(550, 550));
 		vehicleImage = new HashMap<>();
@@ -75,9 +78,12 @@ public class RushHourView extends JPanel implements Observer
 		BoardMouseResponse imageMouseResponse = new BoardMouseResponse();
 		this.addMouseListener(imageMouseResponse);
 		this.addMouseMotionListener(imageMouseResponse);
+		this.addMouseWheelListener(imageMouseResponse);
 		
 	}
 	
+	
+		
 	
 	private URL getResource(String name)
 	{
@@ -105,6 +111,8 @@ public class RushHourView extends JPanel implements Observer
 		int boardSizeY = RushHour.numRows * (squareSize + 2 * squareMarge);
 		
 		System.out.println("Boardsize " + boardSizeX + " x " + boardSizeY );
+		
+		g2.clearRect(this.getBounds().x, this.getBounds().y, this.getWidth(), this.getHeight());
 		
 		// draw border of board
 		int borderWidth = 2;
@@ -193,8 +201,8 @@ public class RushHourView extends JPanel implements Observer
 		{
 			// horizontal car: positioning and resing in one method 
 			g.drawImage(vehicleImg,
-					boardStartXPos + squareSizeIncl * car.getXPos() + lengthPlaceMarge / 2, 
-					boardStartYPos + squareSizeIncl * car.getYPos() + widthPlaceMarge / 2,
+					boardStartXPos + squareSizeIncl * car.getColumn() + lengthPlaceMarge / 2, 
+					boardStartYPos + squareSizeIncl * car.getRow() + widthPlaceMarge / 2,
 					carDrawLength,
 					carDrawWidth, null);
 		}
@@ -215,7 +223,7 @@ public class RushHourView extends JPanel implements Observer
 			rotXForm.translate(boardStartXPos, -boardStartXPos);
 			
 			// positioning
-			rotXForm.translate(squareSizeIncl * car.getYPos(), - squareSizeIncl * car.getXPos());
+			rotXForm.translate(squareSizeIncl * car.getRow(), - squareSizeIncl * car.getColumn());
 			
 			//scaling
 			rotXForm.scale(lengthScale, widthScale);
@@ -238,32 +246,32 @@ public class RushHourView extends JPanel implements Observer
 	{
 		Car drawTestTruck = new Car(3, Car.HORIZONTAL);
 		
-		drawTestTruck.setXPos(3);
-		drawTestTruck.setYPos(1);
+		drawTestTruck.setColumn(3);
+		drawTestTruck.setRow(1);
 		
 		drawCar(g2, drawTestTruck);
 		
-		drawTestTruck.setXPos(0);
-		drawTestTruck.setYPos(5);
+		drawTestTruck.setColumn(0);
+		drawTestTruck.setRow(5);
 		drawCar(g2, drawTestTruck);
 		
 		Car drawTestCar = new Car(2, Car.HORIZONTAL);
-		drawTestCar.setYPos(2);
+		drawTestCar.setRow(2);
 		drawCar(g2, drawTestCar);
 		
-		drawTestCar.setXPos(2);
+		drawTestCar.setColumn(2);
 		drawCar(g2, drawTestCar);
-		drawTestCar.setXPos(4);
+		drawTestCar.setColumn(4);
 		drawCar(g2, drawTestCar);
 		
 		Car drawTestCarVert = new Car(2, Car.VERTICAL);
 
 		drawCar(g2, drawTestCarVert);
 		
-		drawTestCarVert.setYPos(3);
+		drawTestCarVert.setRow(3);
 		drawCar(g2, drawTestCarVert);
 		
-		drawTestCarVert.setXPos(1);
+		drawTestCarVert.setColumn(1);
 		drawCar(g2, drawTestCarVert);
 	}
 
@@ -329,14 +337,29 @@ public class RushHourView extends JPanel implements Observer
 			
 			int row, column;
 			
-			if ( (row = getRow(startX) ) == -1 || (column = getColumn(startY) ) == -1 )
+			if ( (row = getRow(startY) ) == -1 || (column = getColumn(startX) ) == -1 )
 			{
 				System.out.println("Mousepress outside board");
 			}
 			else
 			{
 				System.out.println("Mousepress on row " + row + ", column " + column);
+				
+				
+				Car foundCar = model.findCar(row, column);
+				
+				if (foundCar == null)
+				{
+					System.out.println("No car found");
+				}
+				else
+				{
+					System.out.println("Found car at position");
+				}
+				
 			}
+			
+			
 
 		}
 
@@ -380,7 +403,42 @@ public class RushHourView extends JPanel implements Observer
 		@Override
 		public void mouseWheelMoved(MouseWheelEvent e)
 		{
-			// TODO Auto-generated method stub
+			int rotation = e.getWheelRotation();
+			int steps = 0;
+			
+			if (rotation < 0)
+			{
+				steps = -1;				
+			}
+			else
+			{
+				steps = 1;
+			}
+			
+			int row, column;
+			
+			if ( (row = getRow(e.getY()) ) == -1 || (column = getColumn(e.getX()) ) == -1 )
+			{
+				System.out.println("Wheel rotation outside board");
+			}
+			else
+			{
+				System.out.println("Wheel rotation " + rotation + " on row " + row + ", column " + column);
+				
+				Car carToMove = model.findCar(row, column);
+				
+				if (carToMove != null)
+				{
+					model.moveCar(carToMove, steps);
+				}
+					
+				
+				
+				
+			}
+			
+			
+
 			
 		}
 		

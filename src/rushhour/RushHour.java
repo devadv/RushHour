@@ -39,9 +39,7 @@ public class RushHour extends Observable
 	 * Places a car on the board. If the car is already on the board, the car is replaced.
 	 * If the car can be placed or replaced, the free/unfree marks on the board
 	 * are adjusted and the car's coordinates are set.
-	 * Exceptions thrown:
-	 * IllegalArgument exception when the row/column argument is out of range.
-	 * 
+	 * Does nothing when the row/column argument is out of range.
 	 * 
 	 *  <p>
 	 *  The given coordinates are for the top-left position of the car.
@@ -55,16 +53,18 @@ public class RushHour extends Observable
 	{
 		if (row < 0 || row >= numRows || column < 0 || column >= numCols)
 		{
-			throw new IllegalArgumentException("Row or column argument outside board. "
-					+ "Row="+ row + ", Column = " + column);
+			//throw new IllegalArgumentException("Row or column argument outside board. "
+				//	+ "Row="+ row + ", Column = " + column);
+			System.out.println("Trying to place car outside board. Row=" + row + " column=" + column);
+			return;
 		}
 		
 		  
 		if (car.isOnBoard())
 		{
 			// clear previous positions
-			int startX = car.getXPos();
-			int startY = car.getYPos();
+			int startX = car.getColumn();
+			int startY = car.getRow();
 			int carSize = car.getSize();
 			
 			
@@ -146,7 +146,7 @@ public class RushHour extends Observable
 			if (car.isOnBoard())
 			{
 				// restore original position
-				placeCar(car, car.getYPos(), car.getXPos());
+				placeCar(car, car.getRow(), car.getColumn());
 			}
 		}
 		
@@ -169,8 +169,8 @@ public class RushHour extends Observable
 			}
 
 		
-			car.setYPos(row);
-			car.setXPos(column);
+			car.setRow(row);
+			car.setColumn(column);
 			car.setOnBoard(true);
 			carList.add(car);
 			
@@ -182,6 +182,24 @@ public class RushHour extends Observable
 	}
 	
 	
+	/**
+	 * Moves car forward or back
+	 * @param car Car to move 
+	 * @param steps <ul><li>Positive is forward (to the right or down).
+	 * 				    <li>Negative is backward (to the left or up).
+	 * 					</ul>
+	 */
+	public void moveCar (Car car, int steps)
+	{
+		if (car.getOrientation() == Car.HORIZONTAL)
+		{
+			placeCar(car, car.getRow(), car.getColumn() + steps);
+		}
+		else if ( car.getOrientation() == Car.VERTICAL)
+		{
+			placeCar(car, car.getRow() + steps, car.getColumn());
+		}
+	}
 	
 	public ArrayList<Car> getCarList()
 	{
@@ -236,7 +254,57 @@ public class RushHour extends Observable
 	}
 		
 
-	
+	/**
+	 * Finds the car at the given board position.
+	 * @param row Row position / vertical position
+	 * @param column Column position / horizontal position
+	 * @return Car object at the position 
+	 */
+	public Car findCar(int row, int column)
+	{
+		Car foundCar = null;
+		for(Car car : carList)
+		{
+			if (car.getRow() == row && car.getColumn() == column)
+			{
+				foundCar = car;
+				break;
+			}
+			
+			
+			if (car.getOrientation() == Car.HORIZONTAL)
+			{
+				if (car.getRow() == row)
+				{
+					for (int i = 1; i < car.getSize(); i++)
+					{
+						if (column == car.getColumn() + i)
+						{
+							foundCar = car;
+							break;
+						}
+					}
+				}
+			}
+			else if (car.getOrientation() == Car.VERTICAL)
+			{
+				if (car.getColumn() == column)
+				{
+					for (int i = 1; i < car.getSize(); i++)
+					{
+						if (row == car.getRow() + i)
+						{
+							foundCar = car;
+							break;
+						}
+					}
+				}
+			}
+			
+		}
+		
+		return foundCar;
+	}
 	
 	
 	
