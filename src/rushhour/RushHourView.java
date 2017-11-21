@@ -7,9 +7,12 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Stroke;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -39,7 +42,7 @@ public class RushHourView extends JPanel implements Observer
 	public RushHourView()
 	{
 		System.out.println("Starting view");
-		this.setPreferredSize(new Dimension(600, 700));
+		this.setPreferredSize(new Dimension(550, 550));
 		vehicleImage = new HashMap<>();
 		
 		try
@@ -68,6 +71,10 @@ public class RushHourView extends JPanel implements Observer
 			System.out.println("Cannot load image");
 			System.out.println(e.getMessage());
 		}
+		
+		BoardMouseResponse imageMouseResponse = new BoardMouseResponse();
+		this.addMouseListener(imageMouseResponse);
+		this.addMouseMotionListener(imageMouseResponse);
 		
 	}
 	
@@ -266,6 +273,116 @@ public class RushHourView extends JPanel implements Observer
 	{
 		model = (RushHour) o;
 		repaint();
+		
+	}
+	
+	
+	/**
+	 * Listener for mouse clicks and drags on the Board
+	 * @author david
+	 */
+	private class BoardMouseResponse implements MouseListener, MouseMotionListener, MouseWheelListener
+	{
+		
+		int getRow(int yPos)
+		{
+			int row = (yPos - boardStartYPos ) / (squareSize + 2 * squareMarge);
+			if (yPos < boardStartYPos || row >= RushHour.numRows)
+			{
+				return -1;
+			}
+			else
+			{
+				return row;
+			}
+		}
+		int getColumn(int xPos)
+		{
+			int column = ( xPos - boardStartXPos ) / (squareSize + 2 * squareMarge);
+			if (xPos < boardStartXPos || column >= RushHour.numCols)
+			{
+				return -1;
+			}
+			else
+			{
+				return column;
+			}
+		}
+		
+		int startX;
+		int startY;
+
+
+		@Override
+		public void mouseClicked(MouseEvent e)
+		{
+			
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e)
+		{
+			startX = e.getX();
+			startY = e.getY();
+			
+			System.out.println("MousePress at x = " + startX + "   y = " + startY);
+			
+			int row, column;
+			
+			if ( (row = getRow(startX) ) == -1 || (column = getColumn(startY) ) == -1 )
+			{
+				System.out.println("Mousepress outside board");
+			}
+			else
+			{
+				System.out.println("Mousepress on row " + row + ", column " + column);
+			}
+
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e)
+		{
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e)
+		{
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e)
+		{
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseDragged(MouseEvent e)
+		{
+			int dX = e.getX() - startX;
+			int dY = e.getY() - startY;
+			
+			System.out.println("Dragged  " + "dx: " + dX + "  dy: " + dY );
+			
+			
+		}
+
+		@Override
+		public void mouseMoved(MouseEvent e)
+		{
+		}
+
+		@Override
+		public void mouseWheelMoved(MouseWheelEvent e)
+		{
+			// TODO Auto-generated method stub
+			
+		}
 		
 	}
 
