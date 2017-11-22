@@ -320,9 +320,7 @@ public class RushHour extends Observable
 		rh.placeCar(car1, 4, 1);
 		
 		rh.printBoard();
-		
-		
-		
+			
 	
 		
 	}

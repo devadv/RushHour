@@ -103,6 +103,7 @@ public class RushHourView extends JPanel implements Observer
 	@Override
 	protected void paintComponent(Graphics g)
 	{
+		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g;
 		
 		Stroke defaultStroke = g2.getStroke();
@@ -112,7 +113,7 @@ public class RushHourView extends JPanel implements Observer
 		
 		System.out.println("Boardsize " + boardSizeX + " x " + boardSizeY );
 		
-		g2.clearRect(this.getBounds().x, this.getBounds().y, this.getWidth(), this.getHeight());
+		//g2.clearRect(0, 0, this.getWidth(), this.getHeight());
 		
 		// draw border of board
 		int borderWidth = 2;
