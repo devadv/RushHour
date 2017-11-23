@@ -62,6 +62,7 @@ public class RushHourView extends JPanel implements Observer
 			vehicleImage.put("H",  ImageIO.read( getResource("/auto_h_grijs.png") ) );
 			vehicleImage.put("I",  ImageIO.read( getResource("/auto_i_wit.png") ) );
 			vehicleImage.put("J",  ImageIO.read( getResource("/auto_j_bruin.png") ) );
+			vehicleImage.put("K",  ImageIO.read( getResource("/auto_k_zwart.png") ) );
 			vehicleImage.put("O",  ImageIO.read( getResource("/truck_o_geel.png") ) );
 			vehicleImage.put("P",  ImageIO.read( getResource("/truck_p_paars.png") ) );
 			vehicleImage.put("Q",  ImageIO.read( getResource("/truck_q_blauw.png") ) );
@@ -123,6 +124,50 @@ public class RushHourView extends JPanel implements Observer
 				    boardSizeX + 2*borderWidth, boardSizeY + 2*borderWidth);
 
 		
+		//  Draw exit port
+		
+		int portRow = RushHour.PORTROW;
+		
+		if (portRow >= 0 && portRow < RushHour.numRows)
+		{
+			int arcR = 16;
+			
+			g2.clearRect(boardStartXPos + boardSizeX + borderWidth/2,
+					boardStartYPos +  (RushHour.PORTROW) * (squareSize + 2 * squareMarge) - arcR/2,
+					borderWidth, squareSize + 2 * squareMarge +arcR);
+			
+			if (portRow < RushHour.numRows - 1)
+			{
+				g2.drawArc(boardStartXPos + boardSizeX + borderWidth,
+						boardStartYPos + (RushHour.PORTROW+1) * (squareSize + 2 * squareMarge),
+						arcR, arcR, 90, 90);
+			}
+			else if (portRow == RushHour.numRows - 1)
+			{
+				int lineX = boardStartXPos + boardSizeX + borderWidth;
+				int lineY = boardStartYPos + borderWidth + (RushHour.numRows ) * (squareSize + 2 * squareMarge);
+				g2.drawLine(lineX, lineY, lineX + arcR/2, lineY);
+			}
+
+		
+			if (portRow > 0)
+			{
+				g2.drawArc(boardStartXPos + boardSizeX + borderWidth ,
+						boardStartYPos - arcR/2 - borderWidth +  (RushHour.PORTROW) * (squareSize + 2 * squareMarge)
+						- arcR/2,
+						arcR, arcR, 180, 90);
+			}
+			else if (portRow == 0)
+			{
+				int lineX = boardStartXPos + boardSizeX + borderWidth;
+				int lineY = boardStartYPos - borderWidth;
+				g2.drawLine(lineX, lineY, lineX + arcR/2, lineY);
+			}
+		}
+		
+
+		
+		
 		// draw squares in board
 		g2.setStroke(defaultStroke);
 		
@@ -161,7 +206,6 @@ public class RushHourView extends JPanel implements Observer
 		for (Car car : carList)
 		{
 			drawCar(g2, car);
-			
 		}
 	}
 	
@@ -180,13 +224,20 @@ public class RushHourView extends JPanel implements Observer
 		Image vehicleImg = null;
 				
 		// determine which image to use
-		if (car.getSize() == 2)
+		
+		String colorCode = RushHourColor.getColorCode(car);
+		
+		if (colorCode != null)
 		{
-			vehicleImg = vehicleImage.get("A");
+			vehicleImg = vehicleImage.get(colorCode);
+		}
+		else if (car.getSize() == 2)
+		{
+			vehicleImg = vehicleImage.get("stdcar");
 		}
 		else if (car.getSize() >= 3)
 		{
-			vehicleImg = vehicleImage.get("Q");
+			vehicleImg = vehicleImage.get("stdtruck");
 		}
 		
 		// total square size for car position

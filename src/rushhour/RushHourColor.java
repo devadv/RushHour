@@ -41,6 +41,65 @@ public class RushHourColor
 	public static final Color P_PURPLE = new Color(179, 143, 233);
 	public static final Color Q_BLUE = new Color(110, 160, 233);
 	public static final Color R_GREEN = new Color(109, 217, 126);
-	
 
+
+
+	public static String getColorCode(Car car)
+	{
+		Color color = car.getColor();
+		int size = car.getSize();
+		
+		String colorCode = null;
+		
+		if (color.equals(X_RED))
+			colorCode = "X";
+		else if (color.equals(A_GREENBLUE))
+			colorCode = "A";
+		else if (color.equals(B_YELLOW))
+			colorCode = "B";
+		else if (color.equals(C_LIGHTBLUE))
+			colorCode = "C";
+		else if (color.equals(D_PINK))
+			colorCode = "D";
+		else if (color.equals(E_BLUE))
+			colorCode = "E";
+		else if (color.equals(F_GREEN))
+			colorCode = "F";
+		else if (color.equals(G_DARKGREEN))
+			colorCode = "G";
+		else if (color.equals(H_GRAY))
+			colorCode = "H";
+		else if (color.equals(I_WHITE))
+			colorCode = "I";
+		else if (color.equals(J_BROWN))
+			colorCode = "J";
+		else if (color.equals(K_BLACK))
+			colorCode = "K";
+		
+		if (colorCode != null)
+		{
+			if (size == 2)
+				return colorCode;
+			else
+				return null;
+				
+		}
+		
+		
+		if (color.equals(O_YELLOW))
+			colorCode = "O";
+		else if (color.equals(P_PURPLE))
+			colorCode = "P";
+		else if (color.equals(Q_BLUE))
+			colorCode = "Q";
+		else if (color.equals(R_GREEN))
+			colorCode = "R";
+		
+		if (size == 3)		
+			return colorCode;
+		else
+			return null;
+	}
 }
+
+

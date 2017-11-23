@@ -12,6 +12,8 @@ public class RushHour extends Observable
 	public static final int numRows = 6;
 	public static final int numCols = 6;
 	
+	public static final int PORTROW = 2;
+	
 	private Field[][] board;
 	
 	/**
@@ -55,8 +57,15 @@ public class RushHour extends Observable
 		{
 			//throw new IllegalArgumentException("Row or column argument outside board. "
 				//	+ "Row="+ row + ", Column = " + column);
-			System.out.println("Trying to place car outside board. Row=" + row + " column=" + column);
-			return;
+			if (row == RushHour.PORTROW && column >= numCols)
+			{
+				System.out.println("Car is through port");
+			}
+			else
+			{
+				System.out.println("Trying to place car outside board. Row=" + row + " column=" + column);
+				return;
+			}
 		}
 		
 		  
@@ -72,7 +81,7 @@ public class RushHour extends Observable
 			
 			if (car.getOrientation() == Car.HORIZONTAL)
 			{
-				for (int i = startX; i < startX + carSize; i++)
+				for (int i = startX; i < startX + carSize && i < numCols; i++)
 				{
 					board[startY][i].unBlock();
 				}
@@ -94,14 +103,19 @@ public class RushHour extends Observable
 		boolean blocked = false;
 		boolean outSideBoard = false;
 		
+		
 		if (car.getOrientation() == Car.HORIZONTAL)
 		{
 
 			for (int i = column; i < column + car.getSize(); i++)
 			{
+				
 				if (i >= numCols)
 				{
-					outSideBoard = true;
+					if (car.getRow() != RushHour.PORTROW)
+					{
+						outSideBoard = true;
+					}
 					break;
 				}
 				
@@ -154,7 +168,7 @@ public class RushHour extends Observable
 		{
 			if (car.getOrientation() == Car.HORIZONTAL)
 			{
-				for (int i = column; i < column + car.getSize(); i++)
+				for (int i = column; i < column + car.getSize() && i < numCols; i++)
 				{
 					board[row][i].block();
 				}
