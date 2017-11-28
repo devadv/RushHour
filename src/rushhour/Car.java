@@ -23,6 +23,8 @@ public class Car
 	
 	private Color color = Color.BLUE;
 	
+	private boolean selected = false;
+	
 	Car(int size, int orientation)
 	{
 		this(size, orientation, Color.BLUE);
@@ -118,6 +120,22 @@ public class Car
 	public void setOnBoard(boolean onBoard)
 	{
 		this.onBoard = onBoard;
+	}
+	
+	
+	public void select()
+	{
+		selected = true;
+	}
+	
+	public void deselect()
+	{
+		selected = false;
+	}
+	
+	public boolean isSelected()
+	{
+		return selected;
 	}
 	
 	

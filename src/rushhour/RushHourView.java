@@ -284,7 +284,28 @@ public class RushHourView extends JPanel implements Observer
 		}
 		
 		
-		
+		if (car.isSelected())
+		{
+			Color oldColor = g.getColor();
+			Stroke oldStroke = g.getStroke();
+			g.setColor(RushHourColor.R_GREEN);
+			
+			g.setStroke(new BasicStroke(2));
+			
+			
+			int cornerX = squareSizeIncl * car.getColumn() + boardStartXPos;
+			int cornerY = squareSizeIncl * car.getRow() + boardStartYPos;
+			
+									
+			g.drawRect(cornerX, cornerY , 20, 20);
+			
+			
+			//g.drawLine(x1, y1, x2, y2);
+			
+			
+			g.setColor(oldColor);
+			g.setStroke(oldStroke);
+		}
 
 						
 	}
@@ -343,6 +364,9 @@ public class RushHourView extends JPanel implements Observer
 	 */
 	private class BoardMouseResponse implements MouseListener, MouseMotionListener, MouseWheelListener
 	{
+		Car foundCar = null;
+		
+		int dragSteps = 0;
 		
 		int getRow(int yPos)
 		{
@@ -385,6 +409,8 @@ public class RushHourView extends JPanel implements Observer
 			startX = e.getX();
 			startY = e.getY();
 			
+			dragSteps = 0;
+			
 			System.out.println("MousePress at x = " + startX + "   y = " + startY);
 			
 			int row, column;
@@ -397,8 +423,19 @@ public class RushHourView extends JPanel implements Observer
 			{
 				System.out.println("Mousepress on row " + row + ", column " + column);
 				
+				if (foundCar != null)
+				{
+					foundCar.deselect();					
+				}
 				
-				Car foundCar = model.findCar(row, column);
+				foundCar = model.findCar(row, column);
+				
+				if (foundCar != null)
+				{
+					foundCar.select();
+				}
+				
+				repaint();
 				
 				if (foundCar == null)
 				{
@@ -442,7 +479,39 @@ public class RushHourView extends JPanel implements Observer
 			int dX = e.getX() - startX;
 			int dY = e.getY() - startY;
 			
+			int d = 0;
+			
+			int squareIncl = squareSize + 2 * squareMarge;
+			
+			
 			System.out.println("Dragged  " + "dx: " + dX + "  dy: " + dY );
+			
+			if (foundCar != null)
+			{
+				if (foundCar.getOrientation() == Car.HORIZONTAL)
+				{
+					d = dX;										
+				}
+				else
+				{
+					d = dY;
+				}
+				
+			}
+			
+			
+			if (d > squareIncl + dragSteps * squareIncl)
+			{
+				System.out.println("Trying to drag car " + foundCar);
+				model.moveCar(foundCar, 1);
+				dragSteps++;
+			}
+			else if (d < -squareIncl + dragSteps * squareIncl)
+			{
+				model.moveCar(foundCar, -1);
+				dragSteps--;
+			}
+			
 			
 			
 		}
