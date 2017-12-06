@@ -476,6 +476,12 @@ public class RushHourView extends JPanel implements Observer
 		@Override
 		public void mouseDragged(MouseEvent e)
 		{
+			if (model.isDesignMode())
+			{
+				freeDrag(e);
+				return;
+			}
+			
 			int dX = e.getX() - startX;
 			int dY = e.getY() - startY;
 			
@@ -515,6 +521,42 @@ public class RushHourView extends JPanel implements Observer
 			
 			
 		}
+		
+		
+		private int dragStepsX = 0;
+		
+		
+		private void freeDrag(MouseEvent e)
+		{
+			
+			int dX = e.getX() - startX;
+			int dY = e.getY() - startY;
+			
+			int squareIncl = squareSize + 2 * squareMarge;
+				
+			System.out.println("Dragged  " + "dx: " + dX + "  dy: " + dY );
+			
+			if (foundCar != null)
+			{
+				
+			}
+			
+			
+			dragStepsX = (dX - dragStepsX * squareIncl) / squareIncl; 
+			
+			System.out.println("Trying to free-drag car " + foundCar);
+			int previous = foundCar.getColumn();
+			model.placeCar(foundCar, foundCar.getRow() , foundCar.getColumn() + dragStepsX);
+			
+			if(foundCar.getColumn() != previous)
+			{
+				dragStepsX = 0;
+			}
+			
+		
+
+		}
+		
 
 		@Override
 		public void mouseMoved(MouseEvent e)

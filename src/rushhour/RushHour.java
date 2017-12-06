@@ -16,6 +16,9 @@ public class RushHour extends Observable
 	
 	private Field[][] board;
 	
+	
+	private boolean designMode = false;
+	
 	/**
 	 * List of all cars on the board.
 	 */
@@ -97,9 +100,7 @@ public class RushHour extends Observable
 		}
 		
 		
-		
-		
-		
+				
 		boolean blocked = false;
 		boolean outSideBoard = false;
 		
@@ -321,6 +322,15 @@ public class RushHour extends Observable
 	}
 	
 	
+	
+	public boolean isDesignMode()
+	{
+		return designMode;
+	}
+	public void setDesignMode(boolean designModeOn)
+	{
+		designMode = designModeOn;
+	}
 	
 	public static void main(String[] args)
 	{

@@ -1,5 +1,6 @@
 package rushhour;
 
+import java.awt.BorderLayout;
 import java.util.Observer;
 
 import javax.swing.JFrame;
@@ -10,6 +11,8 @@ public class RushHourApplication extends JFrame
 {
 	private JPanel mainView;
 	private RushHour model;
+	private BottomBar bottomBar;
+	
 	
 	public RushHourApplication()
 	{
@@ -23,7 +26,11 @@ public class RushHourApplication extends JFrame
 		
 		model.addObserver((Observer) mainView);
 		
+		
+		bottomBar = new BottomBar(model);
+		
 		this.add(mainView);
+		this.add(bottomBar, BorderLayout.SOUTH);
 		this.pack();
 
 	}
