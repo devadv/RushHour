@@ -523,39 +523,19 @@ public class RushHourView extends JPanel implements Observer
 		}
 		
 		
-		private int dragStepsX = 0;
-		
 		
 		private void freeDrag(MouseEvent e)
 		{
 			
-			int dX = e.getX() - startX;
-			int dY = e.getY() - startY;
-			
-			int squareIncl = squareSize + 2 * squareMarge;
-				
-			System.out.println("Dragged  " + "dx: " + dX + "  dy: " + dY );
+			int row = getRow(e.getY());
+			int column = getColumn(e.getX());
 			
 			if (foundCar != null)
 			{
-				
+				model.placeCar(foundCar, row, column);
 			}
 			
-			
-			dragStepsX = (dX - dragStepsX * squareIncl) / squareIncl; 
-			
-			System.out.println("Trying to free-drag car " + foundCar);
-			int previous = foundCar.getColumn();
-			model.placeCar(foundCar, foundCar.getRow() , foundCar.getColumn() + dragStepsX);
-			
-			if(foundCar.getColumn() != previous)
-			{
-				dragStepsX = 0;
-			}
-			
-		
-
-		}
+}
 		
 
 		@Override
@@ -595,19 +575,13 @@ public class RushHourView extends JPanel implements Observer
 					model.moveCar(carToMove, steps);
 				}
 					
-				
-				
-				
 			}
 			
-			
-
 			
 		}
 		
 	}
 
 		
-	
 
 }

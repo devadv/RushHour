@@ -1,6 +1,7 @@
 package rushhour;
 
 import java.util.ArrayList;
+import java.util.ListIterator;
 import java.util.Observable;
 
 /**
@@ -40,6 +41,31 @@ public class RushHour extends Observable
 		
 	}
 	
+	
+	private void clearPostions(Car car)
+	{
+		int startX = car.getColumn();
+		int startY = car.getRow();
+		int carSize = car.getSize();
+		
+		if (car.getOrientation() == Car.HORIZONTAL)
+		{
+			for (int i = startX; i < startX + carSize && i < numCols; i++)
+			{
+				board[startY][i].unBlock();
+			}
+			
+		}
+		else if (car.getOrientation() == Car.VERTICAL)
+		{
+			for (int i = startY; i < startY + carSize; i++)
+			{
+				board[i][startX].unBlock();
+			}
+		}
+	}
+
+	
 	/**
 	 * Places a car on the board. If the car is already on the board, the car is replaced.
 	 * If the car can be placed or replaced, the free/unfree marks on the board
@@ -71,32 +97,16 @@ public class RushHour extends Observable
 			}
 		}
 		
+		
+		
+		
 		  
 		if (car.isOnBoard())
 		{
 			// clear previous positions
-			int startX = car.getColumn();
-			int startY = car.getRow();
-			int carSize = car.getSize();
-			
-			
+			clearPostions(car);
 			carList.remove(car);
-			
-			if (car.getOrientation() == Car.HORIZONTAL)
-			{
-				for (int i = startX; i < startX + carSize && i < numCols; i++)
-				{
-					board[startY][i].unBlock();
-				}
-				
-			}
-			else if (car.getOrientation() == Car.VERTICAL)
-			{
-				for (int i = startY; i < startY + carSize; i++)
-				{
-					board[i][startX].unBlock();
-				}
-			}
+
 		}
 		
 		
@@ -320,6 +330,26 @@ public class RushHour extends Observable
 		
 		return foundCar;
 	}
+	
+	
+	
+	public void removeSelectedCar()
+	{
+		ListIterator<Car> li = carList.listIterator();
+		
+		while (li.hasNext())
+		{
+			Car car = li.next();
+			if (car.isSelected())
+			{
+				clearPostions(car);
+				li.remove();
+			}
+		}
+		setChanged();
+		notifyObservers();
+	}
+	
 	
 	
 	
