@@ -1,8 +1,11 @@
 package rushhour;
 
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -22,7 +25,17 @@ public class BottomBar extends JPanel
 	
 	JComboBox<String> carColorChooser;
 	
-	JRadioButton orientationChooser;
+	JRadioButton orientationHorizontal;
+	JRadioButton orientationVertical;
+	ButtonGroup orientationChooser = new ButtonGroup();
+	
+	JRadioButton chooseTruck;
+	JRadioButton chooseCar;
+	ButtonGroup cartypeChooser = new ButtonGroup();
+		
+	JPanel upperPanel = new JPanel();
+	JPanel middlePanel = new JPanel();
+	JPanel lowerPanel = new JPanel();
 		
 	public void updateButtonState()
 	{
@@ -32,18 +45,46 @@ public class BottomBar extends JPanel
 	
 	public BottomBar(RushHour model)
 	{
+		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		
+		this.add(upperPanel);
+		this.add(middlePanel);
+		this.add(lowerPanel);
+						
 		this.model = model;
+		
 		designModusOn = new JCheckBox();
 		saveButton = new JButton("Opslaan");
 		deleteButton = new JButton("Verwijder");
 		
-		this.add(deleteButton);
-		this.add(saveButton);
+		orientationHorizontal = new JRadioButton("Horizontal");
+		orientationVertical = new JRadioButton("Vertical");
 		
-		carColorChooser = new JComboBox<>(RushHourColor.colorStrEn);
+		chooseCar = new JRadioButton("Car");
+		chooseTruck = new JRadioButton("Truck");
 		
-		this.add(designModusOn);
-		this.add(carColorChooser);
+		upperPanel.add(deleteButton);
+		upperPanel.add(saveButton);
+		
+		carColorChooser = new JComboBox<>(RushHourColor.carColorStrEn);
+		
+		upperPanel.add(designModusOn);
+		
+						
+		cartypeChooser.add(chooseCar);
+		cartypeChooser.add(chooseTruck);
+				
+		middlePanel.add(chooseCar);
+		middlePanel.add(chooseTruck);
+		middlePanel.add(carColorChooser);
+		
+		lowerPanel.add(orientationHorizontal);
+		lowerPanel.add(orientationVertical);
+
+		
+		orientationChooser.add(orientationHorizontal);
+		orientationChooser.add(orientationVertical);
+						
 		designModusOn.addActionListener(new CheckBoxListener());
 		saveButton.addActionListener(new saveButtonListener());
 		deleteButton.addActionListener(new deleteButtonListener());
@@ -86,8 +127,5 @@ public class BottomBar extends JPanel
 	}
 	
 	
-	
-
-
 	
 }

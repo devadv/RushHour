@@ -42,7 +42,12 @@ public class RushHourColor
 	public static final Color Q_BLUE = new Color(110, 160, 233);
 	public static final Color R_GREEN = new Color(109, 217, 126);
 
-	public static final String[] colorStrEn =  {"Red", "Greenblue", "Yellow", "Lightblue", "Pink", "Blue", "Green","Darkgreen" } ; 
+	public static final String[] carColorStrEn =  {"Red", "Greenblue", "Yellow", "Lightblue", "Pink", "Blue", "Green","Darkgreen",
+		"Gray", "White", "Brown", "Black"} ;
+	
+	public static final String[] truckColorStrEn =  {"Yellow", "Purple", "Blue", "Green"	} ;
+	
+	
 
 
 	public static String getColorCode(Car car)
