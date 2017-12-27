@@ -48,6 +48,79 @@ public class RushHourColor
 	public static final String[] truckColorStrEn =  {"Yellow", "Purple", "Blue", "Green"	} ;
 	
 	
+	
+	public static Color getColor(String colorStr, int size)
+	{
+		Color color = null;
+		
+		if (size == 2)
+		{
+			switch (colorStr)
+			{
+				case "Red":
+					color = X_RED;
+					break;
+				case "Greenblue":
+					color = A_GREENBLUE;
+					break;
+				case "Yellow":
+					color = B_YELLOW;
+					break;
+				case "Lightblue":
+					color = C_LIGHTBLUE;
+					break;
+				case "Pink":
+					color = D_PINK;
+					break;
+				case "Blue":
+					color = E_BLUE;
+					break;
+				case "Green":
+					color = F_GREEN;
+					break;
+				case "Darkgreen":
+					color = G_DARKGREEN;
+					break;
+				case "Gray":
+					color = H_GRAY;
+					break;
+				case "White":
+					color = I_WHITE;
+					break;
+				case "Brown":
+					color = J_BROWN;
+					break;
+				case "Black":
+					color = K_BLACK;
+					break;
+
+			}
+		} else if (size == 3)
+		{
+			switch (colorStr)
+			{
+				case "Yellow":
+					color = O_YELLOW;
+					break;
+				case "Purlpe":
+					color = P_PURPLE;
+					break;
+				case "Blue":
+					color = Q_BLUE;
+					break;
+				case "Green":
+					color = R_GREEN;
+					break;
+				default:
+					color = null;
+					break;
+			}
+			
+		}
+		
+		return color;
+	}
+	
 
 
 	public static String getColorCode(Car car)
