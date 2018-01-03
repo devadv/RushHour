@@ -217,7 +217,7 @@ public class BottomBar extends JPanel
 			
 			Color color = RushHourColor.getColor(colorStr, size);
 			
-			Car carToAdd = new Car(size, orientation, color);
+			model.setCarToAdd( new Car(size, orientation, color) );
 			
 			
 		}

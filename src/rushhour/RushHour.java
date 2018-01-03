@@ -25,6 +25,8 @@ public class RushHour extends Observable
 	 */
 	private ArrayList<Car> carList = new ArrayList<>();
 	
+	Car carToAdd;
+	
 
 	public RushHour()
 	{
@@ -362,6 +364,18 @@ public class RushHour extends Observable
 		designMode = designModeOn;
 	}
 	
+	
+	
+	public void setCarToAdd(Car carToAdd)
+	{
+		this.carToAdd = carToAdd;
+	}
+	public Car getCarToAdd()
+	{
+		return carToAdd;
+	}
+	
+	
 	public static void main(String[] args)
 	{
 		System.out.println("Test rushhour");
@@ -374,9 +388,7 @@ public class RushHour extends Observable
 		rh.placeCar(car1, 4, 1);
 		
 		rh.printBoard();
-			
-	
-		
+					
 	}
 			
 }

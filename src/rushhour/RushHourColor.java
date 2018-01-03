@@ -102,7 +102,7 @@ public class RushHourColor
 				case "Yellow":
 					color = O_YELLOW;
 					break;
-				case "Purlpe":
+				case "Purple":
 					color = P_PURPLE;
 					break;
 				case "Blue":
@@ -127,6 +127,12 @@ public class RushHourColor
 	{
 		Color color = car.getColor();
 		int size = car.getSize();
+		
+		if (color == null)
+		{
+			System.out.println("getColorCode warning: car has no color set");
+			return null;
+		}
 		
 		String colorCode = null;
 		

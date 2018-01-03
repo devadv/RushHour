@@ -2,6 +2,7 @@ package rushhour;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -406,14 +407,40 @@ public class RushHourView extends JPanel implements Observer
 		@Override
 		public void mousePressed(MouseEvent e)
 		{
+			
 			startX = e.getX();
 			startY = e.getY();
 			
 			dragSteps = 0;
+
+			
+			int row, column;
+
+			
+			if (model.isDesignMode() && model.getCarToAdd() != null)
+			{
+				if ( (row = getRow(startY) ) == -1 || (column = getColumn(startX) ) == -1 )
+				{
+					System.out.println("Mousepress outside board");
+				}
+				else
+				{
+					System.out.println("Mousepress on row " + row + ", column " + column);
+					
+					model.placeCar(model.getCarToAdd(), row, column);
+				}
+				
+				model.setCarToAdd(null);
+				getParent().setCursor(Cursor.getDefaultCursor());
+				
+				
+				return;
+				
+			}
+			
 			
 			System.out.println("MousePress at x = " + startX + "   y = " + startY);
 			
-			int row, column;
 			
 			if ( (row = getRow(startY) ) == -1 || (column = getColumn(startX) ) == -1 )
 			{
